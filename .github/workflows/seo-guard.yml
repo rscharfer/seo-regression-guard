@@ -1,0 +1,19 @@
+name: SEO Regression Guard
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  seo-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      # Fails the build (non-zero exit) if any blocking SEO regression is found,
+      # so a broken shared template is caught in review instead of in production.
+      - run: npm run check

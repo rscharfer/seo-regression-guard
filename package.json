@@ -1,0 +1,29 @@
+{
+  "name": "seo-regression-guard",
+  "version": "1.0.0",
+  "description": "A build-time SEO regression guard for shared storefront templates. Fails the build before a broken template can quietly break SEO across many retailer storefronts at once.",
+  "type": "module",
+  "scripts": {
+    "check": "tsx src/cli.ts fixtures/storefronts",
+    "report": "tsx src/cli.ts fixtures/storefronts --html report.html",
+    "check:json": "tsx src/cli.ts fixtures/storefronts --json"
+  },
+  "keywords": [
+    "seo",
+    "ci",
+    "build-time",
+    "regression",
+    "storefront",
+    "guardrail"
+  ],
+  "author": "Ryan Scharfer",
+  "license": "MIT",
+  "dependencies": {
+    "node-html-parser": "^6.1.13"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.21",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

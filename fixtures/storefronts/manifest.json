@@ -1,0 +1,102 @@
+{
+  "pages": [
+    {
+      "file": "freshmart/search.html",
+      "retailer": "FreshMart",
+      "template": "search-v5",
+      "url": "https://freshmart.example/search",
+      "kind": "search"
+    },
+    {
+      "file": "greengrocer/search.html",
+      "retailer": "GreenGrocer",
+      "template": "search-v5",
+      "url": "https://greengrocer.example/search",
+      "kind": "search"
+    },
+    {
+      "file": "cornerstone/search.html",
+      "retailer": "Cornerstone Foods",
+      "template": "search-v5",
+      "url": "https://cornerstonefoods.example/search",
+      "kind": "search"
+    },
+    {
+      "file": "bayou/search.html",
+      "retailer": "Bayou Market",
+      "template": "search-v5",
+      "url": "https://bayoumarket.example/search",
+      "kind": "search"
+    },
+    {
+      "file": "sunrise/search.html",
+      "retailer": "Sunrise Co-op",
+      "template": "search-v5",
+      "url": "https://sunrisecoop.example/search",
+      "kind": "search"
+    },
+    {
+      "file": "freshmart/home.html",
+      "retailer": "FreshMart",
+      "template": "home-v2",
+      "url": "https://freshmart.example/",
+      "kind": "home"
+    },
+    {
+      "file": "greengrocer/home.html",
+      "retailer": "GreenGrocer",
+      "template": "home-v2",
+      "url": "https://greengrocer.example/",
+      "kind": "home"
+    },
+    {
+      "file": "cornerstone/home.html",
+      "retailer": "Cornerstone Foods",
+      "template": "home-v2",
+      "url": "https://cornerstonefoods.example/",
+      "kind": "home"
+    },
+    {
+      "file": "freshmart/pdp-bananas.html",
+      "retailer": "FreshMart",
+      "template": "pdp-v3",
+      "url": "https://freshmart.example/p/organic-bananas",
+      "kind": "product"
+    },
+    {
+      "file": "greengrocer/pdp-avocado.html",
+      "retailer": "GreenGrocer",
+      "template": "pdp-v3",
+      "url": "https://greengrocer.example/p/hass-avocado",
+      "kind": "product"
+    },
+    {
+      "file": "cornerstone/pdp-rice.html",
+      "retailer": "Cornerstone Foods",
+      "template": "pdp-v3",
+      "url": "https://cornerstonefoods.example/p/jasmine-rice",
+      "kind": "product"
+    },
+    {
+      "file": "bayou/pdp-shrimp.html",
+      "retailer": "Bayou Market",
+      "template": "pdp-v3",
+      "url": "https://bayoumarket.example/p/gulf-shrimp",
+      "kind": "product"
+    },
+    {
+      "file": "sunrise/home.html",
+      "retailer": "Sunrise Co-op",
+      "template": "home-v3",
+      "url": "https://sunrisecoop.example/",
+      "kind": "home"
+    },
+    {
+      "file": "sunrise/pdp-coffee.html",
+      "retailer": "Sunrise Co-op",
+      "template": "pdp-v4",
+      "url": "https://sunrisecoop.example/p/cold-brew",
+      "kind": "product"
+    }
+  ]
+}
