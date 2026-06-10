@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SEO Regression Guard — FAIL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #f3f5f3;
+    --card: #ffffff;
+    --ink: #15211c;
+    --muted: #5e6b64;
+    --line: #15211c1a;
+    --pass: #0e6e5b;
+    --fail: #c2402a;
+    --warn: #9a6b16;
+    --accent: #0e6e5b;
+    --shadow: 0 1px 0 #15211c0a, 0 8px 24px -16px #15211c40;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(120% 60% at 100% 0%, #e7efe9 0%, transparent 60%),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Hanken Grotesk", system-ui, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 40px 24px 72px; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+
+  /* ---- masthead ---- */
+  .masthead { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace; font-size: 12px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 8px;
+  }
+  h1 { font-size: clamp(26px, 4.4vw, 40px); line-height: 1.05; font-weight: 800; margin: 0; letter-spacing: -0.02em; }
+  .sub { color: var(--muted); margin: 10px 0 0; max-width: 46ch; }
+
+  .verdict {
+    font-family: "IBM Plex Mono", monospace; font-weight: 600; font-size: 13px;
+    letter-spacing: .08em; padding: 8px 14px; border-radius: 999px; white-space: nowrap;
+    border: 1px solid transparent;
+  }
+  .verdict.pass { color: var(--pass); background: #0e6e5b14; border-color: #0e6e5b33; }
+  .verdict.fail { color: var(--fail); background: #c2402a14; border-color: #c2402a33; }
+
+  /* ---- summary strip ---- */
+  .strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line);
+    border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin: 28px 0 36px; }
+  .stat { background: var(--card); padding: 16px 18px; }
+  .stat .n { font-family: "IBM Plex Mono", monospace; font-weight: 600; font-size: 26px; line-height: 1; }
+  .stat .l { font-size: 12px; color: var(--muted); margin-top: 6px; letter-spacing: .02em; }
+  .stat.alarm .n { color: var(--fail); }
+
+  /* ---- section headings ---- */
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin: 8px 0 16px; }
+  .sec-head h2 { font-size: 17px; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+  .sec-head .hint { font-size: 13px; color: var(--muted); }
+
+  /* ---- blast-radius cards (the signature element) ---- */
+  .blast { display: grid; gap: 14px; margin-bottom: 40px; }
+  .reg {
+    background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--fail);
+    border-radius: 12px; padding: 18px 20px; box-shadow: var(--shadow);
+  }
+  .reg.warn { border-left-color: var(--warn); }
+  .reg-top { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .reg-template {
+    font-family: "IBM Plex Mono", monospace; font-weight: 600; font-size: 14px;
+    background: #15211c0d; padding: 3px 8px; border-radius: 6px;
+  }
+  .reg-rule { font-weight: 600; margin-left: 2px; }
+  .radius { display: flex; align-items: baseline; gap: 7px; }
+  .radius .num { font-family: "IBM Plex Mono", monospace; font-weight: 600; font-size: 30px; line-height: 1; color: var(--fail); }
+  .reg.warn .radius .num { color: var(--warn); }
+  .radius .lab { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .reg-detail { color: var(--ink); margin: 12px 0 14px; font-size: 14.5px; }
+
+  /* the row of storefront chips that "light up" to show spread */
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+  .chips .caption { font-size: 12px; color: var(--muted); margin-right: 4px; }
+  .chip {
+    font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 500;
+    padding: 5px 10px; border-radius: 7px; border: 1px solid var(--fail);
+    color: #fff; background: var(--fail);
+  }
+  .reg.warn .chip { border-color: var(--warn); background: var(--warn); }
+
+  /* ---- localized issues ---- */
+  .local { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line);
+    border-radius: 12px; overflow: hidden; margin-bottom: 40px; }
+  .row { background: var(--card); padding: 14px 18px; display: grid; grid-template-columns: 64px 1fr; gap: 14px; align-items: start; }
+  .badge { font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: .06em;
+    padding: 3px 0; text-align: center; border-radius: 6px; }
+  .badge.fail { color: var(--fail); background: #c2402a14; }
+  .badge.warn { color: var(--warn); background: #9a6b1614; }
+  .row .what { font-weight: 600; }
+  .row .who { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted); margin-left: 8px; font-weight: 400; }
+  .row .why { color: var(--muted); font-size: 14px; margin-top: 3px; }
+
+  .empty { color: var(--muted); font-size: 14px; padding: 18px; border: 1px dashed var(--line); border-radius: 12px; margin-bottom: 40px; }
+
+  /* ---- footer ---- */
+  footer { border-top: 1px solid var(--line); padding-top: 18px; color: var(--muted); font-size: 13px;
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  footer .mono { font-size: 12px; }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid #0e6e5b40; }
+
+  @media (max-width: 560px) {
+    .strip { grid-template-columns: repeat(2, 1fr); }
+    .row { grid-template-columns: 56px 1fr; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .reg, .stat { animation: rise .4s ease both; }
+    @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <div>
+      <p class="eyebrow">Build-time SEO check</p>
+      <h1>SEO Regression Guard</h1>
+      <p class="sub">One broken shared template can drop SEO across many retailer storefronts at once. This check runs before the build ships and sizes each break by how far it spreads.</p>
+    </div>
+    <span class="verdict fail">FAIL · 4 blocking</span>
+  </header>
+
+  <section class="strip" aria-label="Scan summary">
+    <div class="stat"><div class="n">14</div><div class="l">pages scanned</div></div>
+    <div class="stat"><div class="n">5</div><div class="l">retailers</div></div>
+    <div class="stat"><div class="n">5</div><div class="l">shared templates</div></div>
+    <div class="stat alarm"><div class="n">5</div><div class="l">worst blast radius</div></div>
+  </section>
+
+  <div class="sec-head"><h2>Template regressions</h2><span class="hint">sorted by blast radius — how many storefronts each break hits</span></div><div class="blast">
+    <article class="reg ">
+      <div class="reg-top">
+        <div><span class="reg-template">search-v5</span> <span class="reg-rule">Indexable (no stray noindex)</span></div>
+        <div class="radius"><span class="num">5</span><span class="lab">storefronts hit</span></div>
+      </div>
+      <p class="reg-detail">Page is marked noindex. This is how a staging flag quietly removes a storefront from Google entirely.</p>
+      <div class="chips"><span class="caption">spreads to:</span><span class="chip">FreshMart</span><span class="chip">GreenGrocer</span><span class="chip">Cornerstone Foods</span><span class="chip">Bayou Market</span><span class="chip">Sunrise Co-op</span></div>
+    </article>
+    <article class="reg warn">
+      <div class="reg-top">
+        <div><span class="reg-template">pdp-v3</span> <span class="reg-rule">Open Graph (social previews)</span></div>
+        <div class="radius"><span class="num">4</span><span class="lab">storefronts hit</span></div>
+      </div>
+      <p class="reg-detail">Missing Open Graph tags: og:image. Shared links will render as bare URLs.</p>
+      <div class="chips"><span class="caption">spreads to:</span><span class="chip">FreshMart</span><span class="chip">GreenGrocer</span><span class="chip">Cornerstone Foods</span><span class="chip">Bayou Market</span></div>
+    </article>
+    <article class="reg ">
+      <div class="reg-top">
+        <div><span class="reg-template">home-v2</span> <span class="reg-rule">Canonical URL</span></div>
+        <div class="radius"><span class="num">3</span><span class="lab">storefronts hit</span></div>
+      </div>
+      <p class="reg-detail">Missing &lt;link rel=&quot;canonical&quot;&gt;. Duplicate storefront URLs will compete with each other in ranking.</p>
+      <div class="chips"><span class="caption">spreads to:</span><span class="chip">FreshMart</span><span class="chip">GreenGrocer</span><span class="chip">Cornerstone Foods</span></div>
+    </article></div>
+
+  <div class="sec-head"><h2>Localized issues</h2><span class="hint">contained to a single page</span></div><div class="local">
+    <div class="row">
+      <span class="badge fail">FAIL</span>
+      <div>
+        <div class="what">Page title<span class="who">GreenGrocer · https://greengrocer.example/p/hass-avocado</span></div>
+        <div class="why">&lt;title&gt; is only 7 characters (&quot;Product&quot;) — almost certainly a truncated or placeholder title.</div>
+      </div>
+    </div>
+    <div class="row">
+      <span class="badge fail">FAIL</span>
+      <div>
+        <div class="what">Structured data (JSON-LD)<span class="who">Cornerstone Foods · https://cornerstonefoods.example/p/jasmine-rice</span></div>
+        <div class="why">No JSON-LD structured data. Rich results (product price, rating, availability) won&#39;t show in search.</div>
+      </div>
+    </div>
+    <div class="row">
+      <span class="badge warn">WARN</span>
+      <div>
+        <div class="what">Exactly one H1<span class="who">Bayou Market · https://bayoumarket.example/p/gulf-shrimp</span></div>
+        <div class="why">2 &lt;h1&gt; elements found. Multiple H1s dilute the page&#39;s main topic.</div>
+      </div>
+    </div></div>
+
+  <footer>
+    <span>Generated 2026-06-10 23:55 UTC</span>
+    <span class="mono">Built by Ryan Scharfer and Claude Code</span>
+  </footer>
+
+</div>
+</body>
+</html>
