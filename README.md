@@ -3,7 +3,7 @@
 A build-time check that stops a broken **shared template** from quietly breaking SEO
 across many retailer storefronts at once.
 
-![Sample report](https://rscharfer.github.io/seo-regression-guard/)
+[Sample report](https://rscharfer.github.io/seo-regression-guard/)
 
 When one platform renders thousands of white-label storefronts from a handful of
 shared templates, a single template change has leverage in both directions. Ship a
