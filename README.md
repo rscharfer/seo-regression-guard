@@ -3,6 +3,8 @@
 A build-time check that stops a broken **shared template** from quietly breaking SEO
 across many retailer storefronts at once.
 
+![Sample report](docs/report-preview.png)
+
 When one platform renders thousands of white-label storefronts from a handful of
 shared templates, a single template change has leverage in both directions. Ship a
 good change and every storefront improves. Drop a `<link rel="canonical">` or leave a
